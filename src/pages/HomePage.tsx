@@ -21,6 +21,8 @@ const HomePage = () => {
       <Link to="/edit?mode=create">
         <button>CREATE</button>
       </Link>
+      {/* useNaviate: 동적 처리 (예: 특정 조건에서 이동) 할 때 사용
+        Link: 정적 처리 (예: 버튼, 링크 클릭 시 이동) 할 때 사용  */}
     </>
   );
 };
