@@ -9,8 +9,11 @@ const EditPage = () => {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    setSearchParams({ mode: searchParams.get("mode") || "create" });
-  }, [setSearchParams, searchParams]);
+    setSearchParams(
+      { mode: searchParams.get("mode") || "update" },
+      { replace: true } // 브라우저 히스토리에 기록되지 않도록 설정 (뒤로가기 한 번으로 홈페이지 이동)
+    );
+  }, []);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
