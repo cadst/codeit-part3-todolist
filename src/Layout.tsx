@@ -1,11 +1,10 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header";
 
 const Layout = () => {
   return (
     <>
-      <Link to="/">Home</Link>
-      <Link to="/edit">Edit</Link>
-      {/*  component nav.ts로 따로 만들기 (header) */}
+      <Header />
       <Outlet />
     </>
   );
