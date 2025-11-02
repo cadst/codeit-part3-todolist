@@ -2,6 +2,12 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, type FormEvent, type ChangeEvent } from "react"; // "type" 키워드: 타입 전용 임포트 시 사용
 import EditForm from "../components/edit/EditForm";
 
+type Item = {
+  id: string;
+  title: string;
+  description: string;
+};
+
 const EditPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -22,7 +28,7 @@ const EditPage = () => {
     // update 모드이고 id가 있으면 해당 item 데이터 로드
     if (mode === "update" && id) {
       const items = JSON.parse(localStorage.getItem("item") || "[]");
-      const item = items.find((item: any) => item.id === id);
+      const item = items.find((item: Item) => item.id === id);
       if (item) {
         setTitle(item.title);
         setDescription(item.description);

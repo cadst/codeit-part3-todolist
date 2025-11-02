@@ -3,6 +3,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import EditPage from "./pages/EditPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import RootLayout from "./components/RootLayout";
 
 /*
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/edit", element: <EditPage /> },
+      { path: "*", element: <NotFoundPage /> }, // 모든 잘못된 경로 처리
     ],
   },
 ]);
