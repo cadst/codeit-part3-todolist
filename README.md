@@ -11,7 +11,7 @@
 - [x] EditForm 컴포넌트 분리
 - [x] 라우터 모드 declarative -> data 변경
 - [x] 잘못된 경로 404 처리
-- [] useMemo, useCallBack 사용방법 공부하여 리렌더 최적화시키기
+- [ ] useMemo, useCallBack 사용방법 공부하여 리렌더 최적화시키기
 
 ~11/3(월) 과제
 
@@ -93,3 +93,4 @@ export default defineConfig([
   },
 ]);
 ```
+
