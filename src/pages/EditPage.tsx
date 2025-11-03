@@ -50,8 +50,8 @@ const EditPage = () => {
     if (editId) {
       const updatedItems = items.map((item: any) =>
         item.id === editId ? { id: editId, title, description } : item
-      );
-      localStorage.setItem("item", JSON.stringify(updatedItems));
+      ); // 배열 -> 객체 바꿀 예정
+      localStorage.setItem("item", JSON.stringify(updatedItems)); // 예외 처리 try ... catch 문 사용 (JSON.stringify, JSON.parse 필수)
       navigate("/");
     }
     // create 모드: 새 item 생성
@@ -78,9 +78,9 @@ const EditPage = () => {
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { value, tagName } = e.target;
-    if (value.length > 30 && tagName === "INPUT") return;
-    if (value.length > 100 && tagName === "TEXTAREA") return;
+    const { value, tagName } = e.target; // tagName -> name: 여러 input을 고려했을 때 더 나은 방법
+    if (value.trim().length > 30 && tagName === "INPUT") return;
+    if (value.trim().length > 200 && tagName === "TEXTAREA") return;
 
     if (tagName === "INPUT") {
       setTitle(value);
@@ -103,3 +103,8 @@ const EditPage = () => {
 };
 
 export default EditPage;
+
+// const [input, setInput] = useState<{title: string, description: string}>({title: "", description: ""});
+
+// const {name, value} = e.target;
+// setInput((prev) => ({...prev, [name]: value}))

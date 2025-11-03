@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/edit", element: <EditPage /> },
-      { path: "*", element: <NotFoundPage /> }, // 모든 잘못된 경로 처리
+      { path: "*", element: <NotFoundPage /> }, // *: wildcard, 모든 잘못된 경로 처리
     ],
   },
 ]);

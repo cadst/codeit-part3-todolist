@@ -9,6 +9,17 @@ type Item = {
   description: string;
 };
 
+/*
+{
+  "todo-id1": {
+       "title": "Todo Title1",
+       "description": "Todo description1",
+   },
+
+   .....
+}
+*/
+
 const HomePage = () => {
   const [items, setItems] = useState<Item[]>([]);
   const navigate = useNavigate();
@@ -33,7 +44,8 @@ const HomePage = () => {
 
   // ID로 항목 삭제 (filter 사용)
   const handleDelete = (id: string) => {
-    const newItems = items.filter((item) => item.id !== id);
+    const newItems = items.filter((item) => item.id !== id); // O(n)
+    // 자료구조 map을 사용하면 O(1)로 성능 향상 가능 -> 메모리 사용량 증가 트레이드오프 (성능 > 메모리)
     setItems(newItems);
     localStorage.setItem("item", JSON.stringify(newItems));
   };
