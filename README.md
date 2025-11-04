@@ -21,6 +21,16 @@
   > > [수정] 버튼 클릭 시, /edit?mode=update로 이동, 그리고 해당 수정 페이지에서 Todo Item의 정보 그대로 출력
   > > [삭제] 버튼 클릭 시, LocalStorage에서 해당 Item 정보를 뺀 나머지 정보를 저장.
 
+11/3(월) 피드백
+
+개별
+
+- [x] item(todo) 배열 -> 객체 형태로 변경
+
+공통
+
+-
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

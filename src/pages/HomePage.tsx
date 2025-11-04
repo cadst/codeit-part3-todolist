@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import TodoList from "../components/home/TodoList";
 import { useNavigate } from "react-router-dom";
 
-type Item = {
+type Items = {
   [id: string]: {
     title: string;
     description: string;
@@ -11,10 +11,16 @@ type Item = {
 };
 
 const HomePage = () => {
-  const [items, setItems] = useState<Item>({});
+  const [items, setItems] = useState<Items>({});
   const navigate = useNavigate();
   const loadItems = () => {
-    const storedItems: Item = JSON.parse(localStorage.getItem("item") || "{}");
+    let storedItems: Items = {};
+    try {
+      storedItems = JSON.parse(localStorage.getItem("item") || "{}");
+    } catch (e) {
+      // JSON 파싱 오류
+      return;
+    }
     setItems(storedItems);
   };
 
@@ -32,7 +38,12 @@ const HomePage = () => {
     const newItems = { ...items };
     delete newItems[id];
     setItems(newItems);
-    localStorage.setItem("item", JSON.stringify(newItems));
+    try {
+      localStorage.setItem("item", JSON.stringify(newItems));
+    } catch (e) {
+      // 순환 참조가 있는 객체
+      return;
+    }
   };
 
   const handleEdit = (id: string) => {

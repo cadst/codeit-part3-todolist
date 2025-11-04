@@ -15,16 +15,23 @@ const EditPage = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  let editId: string | null = null;
+  const [editId, setEditId] = useState<string | null>(null); // 상태로 관리해 submit 시에도 유지
+
   useEffect(() => {
     const mode = searchParams.get("mode") || "create";
-    editId = searchParams.get("id");
+    const id = searchParams.get("id");
+    setEditId(id);
 
-    setSearchParams({ mode, ...(editId && { id: editId }) }, { replace: true });
+    setSearchParams({ mode, ...(id && { id }) }, { replace: true });
 
-    if (mode === "update" && editId) {
-      const items = JSON.parse(localStorage.getItem("item") || "{}");
-      const item = items[editId];
+    if (mode === "update" && id) {
+      let items: Item = {};
+      try {
+        items = JSON.parse(localStorage.getItem("item") || "{}");
+      } catch (e) {
+        return;
+      }
+      const item = items[id];
       if (item) {
         setTitle(item.title);
         setDescription(item.description);
@@ -39,31 +46,34 @@ const EditPage = () => {
       return;
     }
 
-    const items = JSON.parse(localStorage.getItem("item") || "[]");
-
-    // update 모드
-    if (editId) {
-      const updatedItems = Object.keys(items).map((id) =>
-        id === editId ? { title, description } : items[id]
-      );
-      localStorage.setItem("item", JSON.stringify(updatedItems)); // 예외 처리 try ... catch 문 사용 (JSON.stringify, JSON.parse 필수)
-      navigate("/");
+    let items: Item = {};
+    try {
+      items = JSON.parse(localStorage.getItem("item") || "{}");
+    } catch (e) {
+      items = {};
     }
-    // create 모드
-    else {
-      const newItem = {
-        title,
-        description,
-      };
 
-      localStorage.setItem(
-        "item",
-        JSON.stringify({ ...items, [Date.now().toString()]: newItem })
-      );
-
+    if (editId) {
+      const updatedItems: Item = { ...items, [editId]: { title, description } };
+      try {
+        localStorage.setItem("item", JSON.stringify(updatedItems));
+      } catch (e) {
+        return;
+      }
+      navigate("/");
+    } else {
+      const newItem = { title, description };
+      try {
+        const newId = Date.now().toString();
+        localStorage.setItem(
+          "item",
+          JSON.stringify({ ...items, [newId]: newItem })
+        );
+      } catch (e) {
+        return;
+      }
       setTitle("");
       setDescription("");
-
       navigate("/");
     }
   };
@@ -71,11 +81,11 @@ const EditPage = () => {
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { value, tagName } = e.target; // tagName -> name: 여러 input을 고려했을 때 더 나은 방법
-    if (value.trim().length > 30 && tagName === "INPUT") return;
-    if (value.trim().length > 200 && tagName === "TEXTAREA") return;
+    const { value, name } = e.target;
+    if (value.trim().length > 30 && name === "title") return;
+    if (value.trim().length > 200 && name === "description") return;
 
-    if (tagName === "INPUT") {
+    if (name === "title") {
       setTitle(value);
     } else {
       setDescription(value);
