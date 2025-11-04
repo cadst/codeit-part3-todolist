@@ -18,16 +18,22 @@ const EditPage = () => {
   const [editId, setEditId] = useState<string | null>(null); // 상태로 관리해 submit 시에도 유지
 
   useEffect(() => {
-    const mode = searchParams.get("mode") || "create";
+    const mode = searchParams.get("mode");
     const id = searchParams.get("id");
-    setEditId(id);
 
+    const isValidMode = mode === "create" || mode === "update";
+    if (!isValidMode) {
+      navigate("/", { replace: true });
+      return;
+    }
+
+    setEditId(id);
     setSearchParams({ mode, ...(id && { id }) }, { replace: true });
 
     if (mode === "update" && id) {
       let items: Item = {};
       try {
-        items = JSON.parse(localStorage.getItem("item") || "{}");
+        items = JSON.parse(localStorage.getItem("item")?.trim() || "{}");
       } catch (e) {
         return;
       }
@@ -48,7 +54,7 @@ const EditPage = () => {
 
     let items: Item = {};
     try {
-      items = JSON.parse(localStorage.getItem("item") || "{}");
+      items = JSON.parse(localStorage.getItem("item")?.trim() || "{}");
     } catch (e) {
       items = {};
     }

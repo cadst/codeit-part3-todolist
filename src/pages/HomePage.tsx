@@ -16,7 +16,7 @@ const HomePage = () => {
   const loadItems = () => {
     let storedItems: Items = {};
     try {
-      storedItems = JSON.parse(localStorage.getItem("item") || "{}");
+      storedItems = JSON.parse(localStorage.getItem("item")?.trim() || "{}");
     } catch (e) {
       // JSON 파싱 오류
       return;
