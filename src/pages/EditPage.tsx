@@ -1,11 +1,12 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, type FormEvent, type ChangeEvent } from "react"; // "type" 키워드: 타입 전용 임포트 시 사용
+import { useState, useEffect, type FormEvent, type ChangeEvent } from "react";
 import EditForm from "../components/edit/EditForm";
 
 type Item = {
-  id: string;
-  title: string;
-  description: string;
+  [id: string]: {
+    title: string;
+    description: string;
+  };
 };
 
 const EditPage = () => {
@@ -14,25 +15,19 @@ const EditPage = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [editId, setEditId] = useState<string | null>(null);
-
+  let editId: string | null = null;
   useEffect(() => {
     const mode = searchParams.get("mode") || "create";
-    const id = searchParams.get("id");
+    editId = searchParams.get("id");
 
-    setSearchParams(
-      { mode, ...(id && { id }) },
-      { replace: true } // 브라우저 히스토리에 기록되지 않도록 설정 (뒤로가기 한 번으로 홈페이지 이동)
-    );
+    setSearchParams({ mode, ...(editId && { id: editId }) }, { replace: true });
 
-    // update 모드이고 id가 있으면 해당 item 데이터 로드
-    if (mode === "update" && id) {
-      const items = JSON.parse(localStorage.getItem("item") || "[]");
-      const item = items.find((item: Item) => item.id === id);
+    if (mode === "update" && editId) {
+      const items = JSON.parse(localStorage.getItem("item") || "{}");
+      const item = items[editId];
       if (item) {
         setTitle(item.title);
         setDescription(item.description);
-        setEditId(id);
       }
     }
   }, []);
@@ -46,32 +41,30 @@ const EditPage = () => {
 
     const items = JSON.parse(localStorage.getItem("item") || "[]");
 
-    // update 모드: 기존 item 업데이트
+    // update 모드
     if (editId) {
-      const updatedItems = items.map((item: any) =>
-        item.id === editId ? { id: editId, title, description } : item
-      ); // 배열 -> 객체 바꿀 예정
+      const updatedItems = Object.keys(items).map((id) =>
+        id === editId ? { title, description } : items[id]
+      );
       localStorage.setItem("item", JSON.stringify(updatedItems)); // 예외 처리 try ... catch 문 사용 (JSON.stringify, JSON.parse 필수)
       navigate("/");
     }
-    // create 모드: 새 item 생성
+    // create 모드
     else {
       const newItem = {
-        id: Date.now().toString(),
         title,
         description,
       };
-      localStorage.setItem("item", JSON.stringify([...items, newItem]));
+
+      localStorage.setItem(
+        "item",
+        JSON.stringify({ ...items, [Date.now().toString()]: newItem })
+      );
 
       setTitle("");
       setDescription("");
 
-      const shouldContinue = window.confirm(
-        "항목이 저장되었습니다. 계속 작성하시겠습니까?"
-      );
-      if (!shouldContinue) {
-        navigate("/");
-      }
+      navigate("/");
     }
   };
 
@@ -87,7 +80,7 @@ const EditPage = () => {
     } else {
       setDescription(value);
     }
-  }; // 최적화 방법
+  };
 
   return (
     <>
@@ -103,8 +96,3 @@ const EditPage = () => {
 };
 
 export default EditPage;
-
-// const [input, setInput] = useState<{title: string, description: string}>({title: "", description: ""});
-
-// const {name, value} = e.target;
-// setInput((prev) => ({...prev, [name]: value}))
