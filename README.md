@@ -32,8 +32,8 @@
 공통
 
 - [x] 새로 todoList 만들때 불변성이 깨지지 않게 하기
-- [ ] mode=INVALID 일때 에러 처리
-- [ ] NotFoundPage 404 (직접 입력한 경로), ErrorPage (잘못된 경로) 구분하기
+- [x] mode=INVALID 일때 에러 처리
+- [x] NotFoundPage, ErrorPage 구분하기
 
 스터디
 

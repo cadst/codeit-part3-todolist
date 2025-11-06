@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import EditPage from "./pages/EditPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import RootLayout from "./components/RootLayout";
+import ErrorPage from "./pages/ErrorPage";
 
 /*
  mode: data
@@ -15,10 +16,11 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />, // 500 오류 로드/렌더링 실패
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/edit", element: <EditPage /> },
-      { path: "*", element: <NotFoundPage /> },
+      { path: "*", element: <NotFoundPage /> }, // 404 오류 존재하지 않는 URL 접근
     ],
   },
 ]);
