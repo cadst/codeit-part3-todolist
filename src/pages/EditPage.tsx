@@ -18,7 +18,7 @@ const EditPage = () => {
   const [editId, setEditId] = useState<string | null>(null); // 상태로 관리해 submit 시에도 유지
 
   useEffect(() => {
-    const mode = searchParams.get("mode");
+    const mode = searchParams.get("mode") || "create";
     const id = searchParams.get("id");
 
     const isValidMode = mode === "create" || mode === "update";
