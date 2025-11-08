@@ -49,3 +49,7 @@ type ReactNode =
   | undefined
   | ReactNode[];
 ```
+
+~11/11(화) 과제
+
+- [x] IntersectionObserver 클래스를 이용한 무한스크롤 구현

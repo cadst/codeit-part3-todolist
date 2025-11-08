@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import TodoList from "../components/home/TodoList";
 import { useNavigate } from "react-router-dom";
+import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
 type Items = {
   [id: string]: {
@@ -10,13 +11,12 @@ type Items = {
   };
 };
 
-const LIMIT = 10;
+const LIMIT = 1;
 
 const HomePage = () => {
   const [items, setItems] = useState<Items>({});
   const [countItems, setCountItems] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const observerRef = useRef<HTMLDivElement | null>(null);
   const allItems: Items = JSON.parse(
     localStorage.getItem("item")?.trim() || "{}"
   );
@@ -44,29 +44,15 @@ const HomePage = () => {
     }
   };
 
+  const observerRef = useIntersectionObserver(() => {
+    if (hasMore) {
+      loadItems();
+    }
+  });
+
   useEffect(() => {
     loadItems();
   }, []);
-
-  // Intersection Observer 설정
-  useEffect(() => {
-    if (!observerRef.current || !hasMore) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadItems();
-        }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    observer.observe(observerRef.current);
-
-    return () => observer.disconnect();
-  }, [countItems]);
 
   const handleDelete = (id: string) => {
     const newItems = { ...items };
