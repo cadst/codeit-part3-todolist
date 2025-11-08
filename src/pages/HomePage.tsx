@@ -73,7 +73,7 @@ const HomePage = () => {
     delete newItems[id];
     setItems(newItems);
     try {
-      localStorage.setItem("item", JSON.stringify(allItems));
+      localStorage.setItem("item", JSON.stringify(newItems));
     } catch (e) {
       // 순환 참조가 있는 객체
       return;
